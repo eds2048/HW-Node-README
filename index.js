@@ -1,7 +1,4 @@
-// HW Assignment
-// Created package.json using npm init
-// Prompt questions
-// Take answers from question to create a Readme
+// HW Assignment - Create ReadMe
 
 const fs = require("fs");
 const axios = require("axios");
@@ -67,32 +64,39 @@ inquirer
     ])
     .then(function (response) {
         if (response.confirm === response.password) {
+            const queryUserName = `https://api.github.com/users/${response.username}`;
+            const queryPassword = `https://api.github.com/users/${response.password}`;
+            const queryReadMe = `https://api.github.com/users/${response}`;
 
-            const queryUrl = `https://api.github.com/users/${username}`;
+            axios.get(queryUserName)
+                .then((response1) => {
+                    console.log(response1.data);
+                    console.log("Success!");
+                    console.log(response.username);
 
+                        
+                        var filename = JSON.stringify(response, null, '\t');
+                        fs.writeFile("ReadMe-Test.md", filename, function (err) {
+                            if (err) {
+                                throw err;
+                            }
+                        else {
+                            axios.post(filename)
+                                .then((response) => {
+                                    console.log("ReadMe posted");
+                                });
+                            console.log("Write file ran");
+                            console.log("Filename " + filename);
+                            console.log("-----------------------------------------");
+                            }
+                        // else {
+                        //         console.log("You forgot your password already?!");
+                        //     }
+                        });
+                    
+                })
 
-
-            console.log("Success!");
-            console.log(response.username);
-        
-
-
-
-
-
-            //console.log(response);
-            var filename = JSON.stringify(response, null, '\t');
-
-            fs.writeFile("ReadMe-Test.md", filename, function (err) {
-                if (err) {
-                    throw err;
-                }
-                console.log("Write file ran");
-            });
-
-        }
-
-        else {
-            console.log("You forgot your password already?!");
-        }
+        };
+     
     });
+            // https://developer.github.com/v3/repos/contents/#create-or-update-a-file
