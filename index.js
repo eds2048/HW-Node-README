@@ -3,6 +3,7 @@
 const fs = require("fs");
 const axios = require("axios");
 var inquirer = require("inquirer");
+
 inquirer
     .prompt([
         {
@@ -62,19 +63,13 @@ inquirer
         }
 
     ])
-    .then(function (response) {
+
+ .then(function (response) {
         if (response.confirm === response.password) {
             const queryUserName = `https://api.github.com/users/${response.username}`;
-            const queryPassword = `https://api.github.com/users/${response.password}`;
-            const queryReadMe = `https://api.github.com/users/${response}`;
-
+  
             axios.get(queryUserName)
-                .then((response1) => {
-                    console.log(response1.data);
-                    console.log("Success!");
-                    console.log(response.username);
-
-                        
+                .then((response1) => {                        
                         var filename = JSON.stringify(response, null, '\t');
                         fs.writeFile("ReadMe-Test.md", filename, function (err) {
                             if (err) {
@@ -89,14 +84,9 @@ inquirer
                             console.log("Filename " + filename);
                             console.log("-----------------------------------------");
                             }
-                        // else {
-                        //         console.log("You forgot your password already?!");
-                        //     }
+
                         });
                     
                 })
-
-        };
-     
+        }
     });
-            // https://developer.github.com/v3/repos/contents/#create-or-update-a-file
